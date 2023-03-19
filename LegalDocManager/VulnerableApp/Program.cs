@@ -1,7 +1,14 @@
-var builder = WebApplication.CreateBuilder(args);
+using Microsoft.EntityFrameworkCore;
+using VulnerableApp.DataLayer;
 
-// Add services to the container.
+var builder = WebApplication.CreateBuilder(args);
+builder.Configuration
+    .SetBasePath(Directory.GetCurrentDirectory())
+    .AddJsonFile("appsettings.json");
 builder.Services.AddRazorPages();
+builder.Services.AddMvc();
+builder.Services.AddDbContext<AppDbContext>(opt => 
+opt.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 var app = builder.Build();
 

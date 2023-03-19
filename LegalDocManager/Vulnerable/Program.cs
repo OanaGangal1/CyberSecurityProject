@@ -1,5 +1,6 @@
 using Dependencies.DataLayer;
 using Microsoft.EntityFrameworkCore;
+using Vulnerable.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -33,6 +34,8 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Authentication}/{action=Index}/{id?}");
+    pattern: "{controller=Register}/{action=Index}/{id?}");
+
+app.DbMigrate();
 
 app.Run();

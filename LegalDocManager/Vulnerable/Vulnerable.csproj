@@ -21,4 +21,8 @@
     <ProjectReference Include="..\Dependencies\Dependencies.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\media\" />
+  </ItemGroup>
+
 </Project>

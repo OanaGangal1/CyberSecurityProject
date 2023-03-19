@@ -3,10 +3,10 @@
   <PropertyGroup Label="Globals">
     <ProjectVersion>2.1</ProjectVersion>
     <DockerTargetOS>Linux</DockerTargetOS>
-    <ProjectGuid>a593713c-72a0-402b-9477-2ef4a9ac580c</ProjectGuid>
+    <ProjectGuid>01aa40b4-a39f-48cc-ad25-3bbe462e367a</ProjectGuid>
     <DockerLaunchAction>LaunchBrowser</DockerLaunchAction>
     <DockerServiceUrl>{Scheme}://localhost:{ServicePort}</DockerServiceUrl>
-    <DockerServiceName>improvedapp</DockerServiceName>
+    <DockerServiceName>vulnerable</DockerServiceName>
   </PropertyGroup>
   <ItemGroup>
     <None Include="docker-compose.override.yml">

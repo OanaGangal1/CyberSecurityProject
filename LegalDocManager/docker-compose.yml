@@ -1,15 +1,8 @@
 version: '3.4'
 
 services:
-  improvedapp:
-    image: ${DOCKER_REGISTRY-}improvedapp
+  vulnerable:
+    image: ${DOCKER_REGISTRY-}vulnerable
     build:
       context: .
-      dockerfile: ImprovedApp/Dockerfile
-
-  vulnerableapp:
-    image: ${DOCKER_REGISTRY-}vulnerableapp
-    build:
-      context: .
-      dockerfile: VulnerableApp/Dockerfile
-
+      dockerfile: Vulnerable/Dockerfile

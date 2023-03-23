@@ -1,6 +1,7 @@
 using Dependencies.DataLayer;
 using Microsoft.EntityFrameworkCore;
 using Vulnerable.Extensions;
+using Vulnerable.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -31,6 +32,8 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthorization();
+
+app.UseMiddleware<CustomAuth>();
 
 app.MapControllerRoute(
     name: "default",

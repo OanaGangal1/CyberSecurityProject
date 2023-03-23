@@ -13,6 +13,7 @@ const authController = function ()
         registerForm: $("#registerForm"),
         loginBtn: $("#loginBtn"),
         loginForm: $("#loginForm"),
+        signoutBtn: $("#signout"),
         errorMessageContainer: $("#errorMessageContainer")
     };
 
@@ -24,7 +25,7 @@ const authController = function ()
         $.post(context.URLS.registerUrl, reqData)
             .done(function (data) {
                 console.log(data);
-                toastr.success(data.responseText);
+                toastr.success(data);
                 utilities.unblockUI();
             })
             .fail(function (data) {
@@ -45,10 +46,16 @@ const authController = function ()
             });
     };
 
+    const onSignout = function () {
+        localStorage.removeItem("AccessToken");
+        location.href = "Login";
+    }
+
     const initAuth = function ()
     {
         context.registerBtn.on('click', onRegister);
         context.loginBtn.on('click', onLogin);
+        context.signoutBtn.on('click', onSignout);
     };
 
     return {

@@ -25,8 +25,9 @@ namespace Vulnerable.Middlewares
             }
 
             var authHeader = context.Request.Headers.Authorization;
+            var tokenQueryParam = context.Request.Query["token"];
 
-            if (StringValues.IsNullOrEmpty(authHeader))
+            if (StringValues.IsNullOrEmpty(authHeader) && StringValues.IsNullOrEmpty(tokenQueryParam))
             {
                 context.Response.Clear();
                 context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;

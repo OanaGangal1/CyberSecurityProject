@@ -37,9 +37,13 @@ const authController = function ()
     const onLogin = function ()
     {
         let reqData = utilities.formDataAsJson(context.loginForm);
+        $.ajax({
+            url: context.URLS.loginUrl, reqData
+        });
         $.post(context.URLS.loginUrl, reqData)
             .done(function (data) {
                 window.localStorage.setItem("AccessToken", data);
+                location.href = "Document?token=" + data;
             })
             .fail(function (data) {
                 toastr.error(data.responseText);

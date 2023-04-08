@@ -15,14 +15,15 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.15.1" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\Dependencies\Dependencies.csproj" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.8.5" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="wwwroot\media\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Dependencies\Dependencies.csproj" />
   </ItemGroup>
 
 </Project>

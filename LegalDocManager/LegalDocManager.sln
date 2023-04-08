@@ -9,7 +9,9 @@ Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-co
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dependencies", "Dependencies\Dependencies.csproj", "{5E621658-87C5-4537-A532-7206F49A16AF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Improved", "Improved\Improved.csproj", "{EC541966-E78C-4BD9-ABBA-E0E88FB8DA8C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Improved", "Improved\Improved.csproj", "{EC541966-E78C-4BD9-ABBA-E0E88FB8DA8C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shared", "Shared\Shared.csproj", "{7E27EFD2-E1EF-4813-970B-20EC8A3407BB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{EC541966-E78C-4BD9-ABBA-E0E88FB8DA8C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EC541966-E78C-4BD9-ABBA-E0E88FB8DA8C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EC541966-E78C-4BD9-ABBA-E0E88FB8DA8C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7E27EFD2-E1EF-4813-970B-20EC8A3407BB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7E27EFD2-E1EF-4813-970B-20EC8A3407BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7E27EFD2-E1EF-4813-970B-20EC8A3407BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7E27EFD2-E1EF-4813-970B-20EC8A3407BB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

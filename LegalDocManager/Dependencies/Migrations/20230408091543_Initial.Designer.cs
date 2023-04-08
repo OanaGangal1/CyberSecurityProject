@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Dependencies.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230319210435_initial")]
-    partial class initial
+    [Migration("20230408091543_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -24,7 +24,7 @@ namespace Dependencies.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("Dependencies.DataLayer.Entities.Document", b =>
+            modelBuilder.Entity("Shared.Entities.Document", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -35,6 +35,10 @@ namespace Dependencies.Migrations
                     b.Property<byte[]>("Content")
                         .IsRequired()
                         .HasColumnType("varbinary(max)");
+
+                    b.Property<string>("ContentType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("FileExtension")
                         .IsRequired()
@@ -54,7 +58,7 @@ namespace Dependencies.Migrations
                     b.ToTable("Documents");
                 });
 
-            modelBuilder.Entity("Dependencies.DataLayer.Entities.User", b =>
+            modelBuilder.Entity("Shared.Entities.User", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -78,9 +82,9 @@ namespace Dependencies.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("Dependencies.DataLayer.Entities.Document", b =>
+            modelBuilder.Entity("Shared.Entities.Document", b =>
                 {
-                    b.HasOne("Dependencies.DataLayer.Entities.User", "User")
+                    b.HasOne("Shared.Entities.User", "User")
                         .WithMany("Documents")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -89,7 +93,7 @@ namespace Dependencies.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Dependencies.DataLayer.Entities.User", b =>
+            modelBuilder.Entity("Shared.Entities.User", b =>
                 {
                     b.Navigation("Documents");
                 });

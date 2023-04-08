@@ -24,7 +24,7 @@ namespace Vulnerable.Controllers
             if (user == null)
                 return BadRequest("Wrong username or password!");
 
-            return await Task.FromResult(Ok(Guid.NewGuid().ToString()));
+            return await Task.FromResult(Ok(user.UserName));
         }
     }
 }

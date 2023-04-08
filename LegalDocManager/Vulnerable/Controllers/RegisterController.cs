@@ -1,6 +1,6 @@
 ﻿using Dependencies.DataLayer;
-using Dependencies.DataLayer.Entities;
 using Microsoft.AspNetCore.Mvc;
+using Shared.Entities;
 using Vulnerable.Models;
 
 namespace Vulnerable.Controllers

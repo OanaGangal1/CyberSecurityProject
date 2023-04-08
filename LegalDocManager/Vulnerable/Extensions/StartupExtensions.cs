@@ -11,5 +11,7 @@ namespace Vulnerable.Extensions
             using var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
             context.Database.Migrate();
         }
+
+        public static string ConnectionString = "Server=localhost; Database=v-legaldoc; Integrated Security=True;";
     }
 }

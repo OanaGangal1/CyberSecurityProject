@@ -1,1 +1,37 @@
-﻿
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>Page Title</title>
+</head>
+<body>
+    <div class="row mt-5">
+        <div>
+            <div class="col-md-5 d-flex flex-row">
+                <form method="post" id="document-form">
+                    <div class="form-group">
+                        <div class="col-md-10 mt-4">
+                            <h5>Upload file</h5>
+                            <input class="form-control mt-4" name="files" id="file-input" type="file" />
+                        </div>
+                    </div>
+                    <div class="form-inline">
+                        <div class="mt-3">
+                            <button class="btn btn-success" type="submit">Upload</button>
+                        </div>
+
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div id="view-documents" class="mt-5">
+        <h5>Search file</h5>
+        <partial name="~/Views/Document/_ViewDocuments.cshtml" model="@Model" />
+    </div>
+    
+</body>
+</html>
+@section Scripts
+    {
+    <script src="~/js/document.js"></script>
+}

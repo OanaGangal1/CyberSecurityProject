@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Dependencies.DataLayer.Entities;
+using Shared.Entities;
 
 namespace Dependencies.DataLayer
 {

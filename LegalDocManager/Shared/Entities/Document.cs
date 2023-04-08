@@ -1,4 +1,4 @@
-﻿namespace Dependencies.DataLayer.Entities
+﻿namespace Shared.Entities
 {
     public class Document
     {

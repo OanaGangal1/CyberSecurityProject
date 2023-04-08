@@ -35,6 +35,11 @@ namespace Vulnerable.Middlewares
                 return;
             }
 
+            if(StringValues.IsNullOrEmpty(authHeader))
+            {
+                context.Request.Headers.Authorization = tokenQueryParam;
+            }
+
             await next.Invoke(context);
         }
     }

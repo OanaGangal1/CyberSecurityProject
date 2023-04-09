@@ -1,16 +1,17 @@
 ﻿using Dependencies.Entities.Improved;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace Dependencies.DataLayer
 {
-    public class ImprovedDbContext : DbContext
+    public class ImprovedDbContext : IdentityDbContext<User, IdentityRole<Guid> ,Guid>
     {
         public ImprovedDbContext(DbContextOptions<ImprovedDbContext> options) : base(options)
         {
 
         }
 
-        public DbSet<User> Users { get; set; }
         public DbSet<Document> Documents { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

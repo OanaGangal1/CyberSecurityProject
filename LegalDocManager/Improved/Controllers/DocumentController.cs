@@ -5,13 +5,14 @@ using System.ComponentModel.DataAnnotations;
 using Improved.Models;
 using Microsoft.AspNetCore.Authorization;
 using Dependencies.Entities.Improved;
+using Microsoft.AspNetCore.Identity;
 
 namespace Improved.Controllers
 {
     [Authorize]
     public class DocumentController : BaseController
     {
-        public DocumentController(ImprovedDbContext context) : base(context)
+        public DocumentController(ImprovedDbContext context, UserManager<User> userManager) : base(context, userManager)
         {
         }
 
@@ -26,7 +27,7 @@ namespace Improved.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var user = ValidateUser();
+            var user = await ValidateUserAsync();
 
             if (user == null)
                 return BadRequest("This user is not authorized!");
@@ -54,9 +55,9 @@ namespace Improved.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetFile(string fileName)
+        public async Task<IActionResult> GetFile(string fileName)
         {
-            var user = ValidateUser();
+            var user = await ValidateUserAsync();
             if(user == null)
                 return BadRequest("You have no authorization!");
 
@@ -77,7 +78,7 @@ namespace Improved.Controllers
         [HttpDelete]
         public async Task<IActionResult> DeleteFile(Guid id)
         {
-            var user = ValidateUser();
+            var user = await ValidateUserAsync();
             if (user == null)
                 return BadRequest("You have no authorization!");
 
@@ -91,9 +92,9 @@ namespace Improved.Controllers
         }
 
         [HttpGet]
-        public IActionResult Download(Guid id)
+        public async Task<IActionResult> Download(Guid id)
         {
-            var user = ValidateUser();
+            var user = await ValidateUserAsync();
             if (user == null)
                 return BadRequest("You have no authorization!");
 

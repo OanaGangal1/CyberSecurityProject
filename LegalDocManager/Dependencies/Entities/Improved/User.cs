@@ -1,11 +1,9 @@
-﻿namespace Dependencies.Entities.Improved
-{
-    public class User
-    {
-        public Guid Id { get; set; }
-        public string UserName { get; set; }
-        public string Password { get; set; }
+﻿using Microsoft.AspNetCore.Identity;
 
+namespace Dependencies.Entities.Improved
+{
+    public class User : IdentityUser<Guid>
+    {
         public List<Document> Documents { get; set; } = new();
     }
 }

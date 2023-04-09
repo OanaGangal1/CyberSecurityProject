@@ -6,16 +6,23 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using Dependencies.Entities.Improved;
+using Microsoft.AspNetCore.Identity;
 
 namespace Improved.Controllers
 {
     public class LoginController : BaseController
     {
         private readonly IConfiguration configuration;
+        private readonly SignInManager<User> signInManager;
 
-        public LoginController(ImprovedDbContext context, IConfiguration configuration) : base(context)
+        public LoginController(
+            ImprovedDbContext context, 
+            IConfiguration configuration,
+            SignInManager<User> signInManager,
+            UserManager<User> userManager) : base(context, userManager)
         {
             this.configuration = configuration;
+            this.signInManager = signInManager;
         }
 
         public IActionResult Index()
@@ -26,11 +33,14 @@ namespace Improved.Controllers
         [HttpPost]
         public async Task<IActionResult> Post(AuthenticationModel model)
         {
-            var user = context.Users
-                .FirstOrDefault(x => x.UserName == model.Username && x.Password == model.Password);
-
+            var user = await userManager.FindByNameAsync(model.Username);
             if (user == null)
                 return BadRequest("Wrong username or password!");
+
+            var result = await signInManager.PasswordSignInAsync(user, model.Password, true, true);
+
+            if (!result.Succeeded)
+                return BadRequest("Invalid credentials!");
 
             var token = CreateToken(user);
 
@@ -62,7 +72,7 @@ namespace Improved.Controllers
 
             var tokenHandler = new JwtSecurityTokenHandler();
             var token = tokenHandler.CreateToken(tokenDescriptor);
-            var jwtToken = tokenHandler.WriteToken(token);
+            tokenHandler.WriteToken(token);
 
             return tokenHandler.WriteToken(token);
         }

@@ -2,13 +2,15 @@
 using Microsoft.AspNetCore.Mvc;
 using Improved.Models;
 using Dependencies.Entities.Improved;
+using Microsoft.AspNetCore.Identity;
 
 namespace Improved.Controllers
 {
     [Controller]
     public class RegisterController : BaseController
     {
-        public RegisterController(ImprovedDbContext context) : base(context)
+
+        public RegisterController(ImprovedDbContext context, UserManager<User> userManager) : base(context, userManager)
         {
         }
 
@@ -23,21 +25,25 @@ namespace Improved.Controllers
             if(!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var user = context.Users.FirstOrDefault(x => x.UserName == model.Username);
+            var user = await userManager.FindByNameAsync(model.Username);
 
             if (user != null)
                 return BadRequest("Username already used!");
 
             user = new User
             {
-                UserName = model.Username,
-                Password = model.Password
+                UserName = model.Username
             };
 
-            await context.Users.AddAsync(user);
-            await context.SaveChangesAsync();
+            var wasCreated = await userManager.CreateAsync(user);
+            
+            if (wasCreated.Succeeded)
+            {
+                await userManager.AddPasswordAsync(user, model.Password);
+                return Ok("Registration was successful!");
+            }
 
-            return Ok("Registration was successful!");
+            return BadRequest("User could not be created!");
         }
     }
 }

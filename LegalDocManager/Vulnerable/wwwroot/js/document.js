@@ -24,8 +24,9 @@ const init = function ()
 {
     $("#document-form").on('submit', function (e) {
         let formData = new FormData();
-        let fileInput = $("#document-form")[0];
-        formData.append('file', fileInput[0].files[0]);
+        let input = $("#document-form")[0];
+        formData.append('file', input[0].files[0]);
+        formData.append('description', input[1].value);
         
         e.preventDefault();
         $.ajax({
@@ -71,10 +72,11 @@ const init = function ()
                     let cell1 = row.insertCell(0);
                     let cell2 = row.insertCell(1);
                     let cell3 = row.insertCell(2);
-                    cell3.classList.add("d-flex")
+                    let cell4 = row.insertCell(3);
                     cell1.innerHTML = el["fileName"];
-                    cell2.innerHTML = el["fileType"]
-                    cell3.innerHTML = "<a href='/Document/Download?token=" + token + "&id=" + el["id"] + "' class='btn btn-success me-3' download='" + el["fileName"] + "'>Download</a>" +
+                    cell2.innerHTML = el["fileType"];
+                    cell3.innerHTML = el["description"];
+                    cell4.innerHTML = "<a href='/Document/Download?token=" + token + "&id=" + el["id"] + "' class='btn btn-success me-3' download='" + el["fileName"] + "'>Download</a>" +
                     "<button type='button' class='btn btn-danger' onclick='deleteFile(this)' value='" + el["id"] + "'>Delete</button>"
                 });
             },

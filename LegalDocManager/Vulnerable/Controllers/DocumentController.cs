@@ -24,7 +24,7 @@ namespace Vulnerable.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Index([Required][FromForm] IFormFile file)
+        public async Task<IActionResult> Index([Required][FromForm] AddFileModel addFile)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -34,19 +34,20 @@ namespace Vulnerable.Controllers
             if (user == null)
                 return BadRequest("This user is not authorized!");
 
-            var fileName = Path.GetFileName(file.FileName);
-            var fileExtension = Path.GetExtension(file.FileName);
+            var fileName = Path.GetFileName(addFile.File.FileName);
+            var fileExtension = Path.GetExtension(addFile.File.FileName);
 
             var document = new Document
             {
                 FileExtension = fileExtension,
                 FileName = fileName,
-                ContentType = file.ContentType,
+                ContentType = addFile.File.ContentType,
+                Description = addFile.Description,
                 User = user
             };
 
             using var stream = new MemoryStream();
-            await file.CopyToAsync(stream);
+            await addFile.File.CopyToAsync(stream);
             document.Content = stream.ToArray();
 
             context.Documents.Add(document);
@@ -59,7 +60,7 @@ namespace Vulnerable.Controllers
         public IActionResult GetFile(string fileName)
         {
             using var connection = new SqlConnection(StartupExtensions.ConnectionString);
-            var query = "SELECT ContentType, FileName, Id FROM [v-legaldoc].dbo.Documents WHERE FileName LIKE '" + fileName + "%'";
+            var query = "SELECT ContentType, FileName, Id, Description FROM [v-legaldoc].dbo.Documents WHERE FileName LIKE '" + fileName + "%'";
             var cmd = connection.CreateCommand();
             cmd.CommandText = query;
             var fileResults = new List<FileModel>();
@@ -75,7 +76,8 @@ namespace Vulnerable.Controllers
                     {
                         Id = reader.GetInt32(2),
                         FileName = reader.GetString(1),
-                        FileType = reader.GetString(0)
+                        FileType = reader.GetString(0),
+                        Description = reader.GetString(3),
                     });
                 }
 
@@ -96,7 +98,7 @@ namespace Vulnerable.Controllers
 
             context.Documents.Remove(file);
             await context.SaveChangesAsync();
-            return Ok();
+            return Ok("File was deleted");
         }
 
         [HttpGet]
@@ -132,17 +134,19 @@ namespace Vulnerable.Controllers
 
         private List<FileModel>? GetFiles()
         {
-            var user = ValidateUser();
+            //var user = ValidateUser();
 
-            if (user == null)
-                return null;
+            //if (user == null)
+            //    return null;
 
             var documents = context.Documents
-                .Include(x => x.User)
-                .Where(x => x.UserId == user.Id)
+                //.Include(x => x.User)
+                //.Where(x => x.UserId == user.Id)
                 .Select(x => new FileModel
                 {
                     FileName = x.FileName,
+                    Description = x.Description,
+                    FileType = x.ContentType,
                     File = new FileContentResult(x.Content, x.ContentType)
                 })
                 .ToList();

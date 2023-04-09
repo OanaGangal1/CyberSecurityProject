@@ -1,14 +1,14 @@
 ﻿using Dependencies.DataLayer;
+using Dependencies.Entities.Vulnerable;
 using Microsoft.AspNetCore.Mvc;
-using Shared.Entities;
 
 namespace Vulnerable.Controllers
 {
     public class BaseController : Controller
     {
-        protected readonly AppDbContext context;
+        protected readonly VulnerableDbContext context;
 
-        public BaseController(AppDbContext context)
+        public BaseController(VulnerableDbContext context)
         {
             this.context = context;
         }

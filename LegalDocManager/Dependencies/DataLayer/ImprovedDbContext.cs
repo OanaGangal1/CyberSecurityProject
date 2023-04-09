@@ -1,16 +1,17 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Shared.Entities;
+﻿using Dependencies.Entities.Improved;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 
 namespace Dependencies.DataLayer
 {
-    public class AppDbContext : DbContext
+    public class ImprovedDbContext : IdentityDbContext<User, IdentityRole<Guid> ,Guid>
     {
-        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
+        public ImprovedDbContext(DbContextOptions<ImprovedDbContext> options) : base(options)
         {
 
         }
 
-        public DbSet<User> Users { get; set; }
         public DbSet<Document> Documents { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

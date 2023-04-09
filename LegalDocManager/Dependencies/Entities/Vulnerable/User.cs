@@ -1,4 +1,4 @@
-﻿namespace Shared.Entities
+﻿namespace Dependencies.Entities.Vulnerable
 {
     public class User
     {

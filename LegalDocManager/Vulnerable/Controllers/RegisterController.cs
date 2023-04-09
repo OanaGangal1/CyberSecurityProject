@@ -1,6 +1,6 @@
 ﻿using Dependencies.DataLayer;
+using Dependencies.Entities.Vulnerable;
 using Microsoft.AspNetCore.Mvc;
-using Shared.Entities;
 using Vulnerable.Models;
 
 namespace Vulnerable.Controllers
@@ -8,7 +8,7 @@ namespace Vulnerable.Controllers
     [Controller]
     public class RegisterController : BaseController
     {
-        public RegisterController(AppDbContext context) : base(context)
+        public RegisterController(VulnerableDbContext context) : base(context)
         {
         }
 

@@ -1,20 +1,17 @@
 ﻿using Dependencies.DataLayer;
-using Shared.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.ComponentModel.DataAnnotations;
-using System.Security.Claims;
 using Vulnerable.Models;
 using Microsoft.Data.SqlClient;
 using Vulnerable.Extensions;
-using System.Xml.Linq;
+using Dependencies.Entities.Vulnerable;
 
 namespace Vulnerable.Controllers
 {
     public class DocumentController : BaseController
     {
-        public DocumentController(AppDbContext context) : base(context)
+        public DocumentController(VulnerableDbContext context) : base(context)
         {
         }
 

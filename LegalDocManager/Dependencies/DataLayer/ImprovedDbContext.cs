@@ -1,11 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Shared.Entities;
+﻿using Dependencies.Entities.Improved;
+using Microsoft.EntityFrameworkCore;
 
 namespace Dependencies.DataLayer
 {
-    public class AppDbContext : DbContext
+    public class ImprovedDbContext : DbContext
     {
-        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
+        public ImprovedDbContext(DbContextOptions<ImprovedDbContext> options) : base(options)
         {
 
         }

@@ -1,14 +1,14 @@
 ﻿using Dependencies.DataLayer;
-using Dependencies.Entities.Vulnerable;
 using Microsoft.AspNetCore.Mvc;
-using Vulnerable.Models;
+using Improved.Models;
+using Dependencies.Entities.Improved;
 
-namespace Vulnerable.Controllers
+namespace Improved.Controllers
 {
     [Controller]
     public class RegisterController : BaseController
     {
-        public RegisterController(VulnerableDbContext context) : base(context)
+        public RegisterController(ImprovedDbContext context) : base(context)
         {
         }
 
@@ -20,6 +20,9 @@ namespace Vulnerable.Controllers
         [HttpPost]
         public async Task<IActionResult> Post(AuthenticationModel model)
         {
+            if(!ModelState.IsValid)
+                return BadRequest(ModelState);
+
             var user = context.Users.FirstOrDefault(x => x.UserName == model.Username);
 
             if (user != null)

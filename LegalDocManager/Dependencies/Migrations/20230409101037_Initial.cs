@@ -13,8 +13,7 @@ namespace Dependencies.Migrations
                 name: "Users",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     UserName = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Password = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
@@ -27,13 +26,13 @@ namespace Dependencies.Migrations
                 name: "Documents",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     FileName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     FileExtension = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ContentType = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Content = table.Column<byte[]>(type: "varbinary(max)", nullable: false),
-                    UserId = table.Column<int>(type: "int", nullable: false)
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {

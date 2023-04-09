@@ -11,9 +11,9 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Dependencies.Migrations
 {
-    [DbContext(typeof(AppDbContext))]
-    [Migration("20230408175305_AddFileDescription")]
-    partial class AddFileDescription
+    [DbContext(typeof(ImprovedDbContext))]
+    [Migration("20230409101037_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -24,13 +24,11 @@ namespace Dependencies.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("Shared.Entities.Document", b =>
+            modelBuilder.Entity("Dependencies.Entities.Improved.Document", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<byte[]>("Content")
                         .IsRequired()
@@ -52,8 +50,8 @@ namespace Dependencies.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
@@ -62,13 +60,11 @@ namespace Dependencies.Migrations
                     b.ToTable("Documents");
                 });
 
-            modelBuilder.Entity("Shared.Entities.User", b =>
+            modelBuilder.Entity("Dependencies.Entities.Improved.User", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Password")
                         .IsRequired()
@@ -86,9 +82,9 @@ namespace Dependencies.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("Shared.Entities.Document", b =>
+            modelBuilder.Entity("Dependencies.Entities.Improved.Document", b =>
                 {
-                    b.HasOne("Shared.Entities.User", "User")
+                    b.HasOne("Dependencies.Entities.Improved.User", "User")
                         .WithMany("Documents")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -97,7 +93,7 @@ namespace Dependencies.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Shared.Entities.User", b =>
+            modelBuilder.Entity("Dependencies.Entities.Improved.User", b =>
                 {
                     b.Navigation("Documents");
                 });

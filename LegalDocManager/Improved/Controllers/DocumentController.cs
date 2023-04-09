@@ -2,16 +2,16 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
-using Vulnerable.Models;
-using Microsoft.Data.SqlClient;
-using Vulnerable.Extensions;
-using Dependencies.Entities.Vulnerable;
+using Improved.Models;
+using Microsoft.AspNetCore.Authorization;
+using Dependencies.Entities.Improved;
 
-namespace Vulnerable.Controllers
+namespace Improved.Controllers
 {
+    [Authorize]
     public class DocumentController : BaseController
     {
-        public DocumentController(VulnerableDbContext context) : base(context)
+        public DocumentController(ImprovedDbContext context) : base(context)
         {
         }
 
@@ -56,40 +56,32 @@ namespace Vulnerable.Controllers
         [HttpGet]
         public IActionResult GetFile(string fileName)
         {
-            using var connection = new SqlConnection(StartupExtensions.ConnectionString);
-            var query = "SELECT ContentType, FileName, Id, Description FROM [v-legaldoc].dbo.Documents WHERE FileName LIKE '" + fileName + "%'";
-            var cmd = connection.CreateCommand();
-            cmd.CommandText = query;
-            var fileResults = new List<FileModel>();
+            var user = ValidateUser();
+            if(user == null)
+                return BadRequest("You have no authorization!");
 
-            try
-            {
-                connection.Open();
-                var reader = cmd.ExecuteReader();
-
-                while (reader.Read())
+            var files = context.Documents
+                .Where(x => x.UserId == user.Id && x.FileName.Contains(fileName))
+                .Select(x => new FileModel
                 {
-                    fileResults.Add(new FileModel
-                    {
-                        Id = reader.GetInt32(2),
-                        FileName = reader.GetString(1),
-                        FileType = reader.GetString(0),
-                        Description = reader.GetString(3),
-                    });
-                }
+                    Id = x.Id,
+                    FileName = x.FileName,
+                    FileType = x.ContentType,
+                    Description = x.Description
+                })
+                .ToList();
 
-            }catch(Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
-
-            return Ok(fileResults);
+            return Ok(files);
         }
 
         [HttpDelete]
-        public async Task<IActionResult> DeleteFile(int id)
+        public async Task<IActionResult> DeleteFile(Guid id)
         {
-            var file = await context.Documents.FirstOrDefaultAsync(x => x.Id == id);
+            var user = ValidateUser();
+            if (user == null)
+                return BadRequest("You have no authorization!");
+
+            var file = await context.Documents.FirstOrDefaultAsync(x => x.Id == id && x.UserId == user.Id);
             if (file == null)
                 return NotFound("File not found");
 
@@ -99,34 +91,17 @@ namespace Vulnerable.Controllers
         }
 
         [HttpGet]
-        public IActionResult Download(int id)
+        public IActionResult Download(Guid id)
         {
-            using var connection = new SqlConnection(StartupExtensions.ConnectionString);
-            var query = "SELECT Content, ContentType FROM [v-legaldoc].dbo.Documents WHERE Id = " + id;
-            var cmd = connection.CreateCommand();
-            cmd.CommandText = query;
+            var user = ValidateUser();
+            if (user == null)
+                return BadRequest("You have no authorization!");
 
-            var contentType = string.Empty;
-            var content = Array.Empty<byte>();
+            var file = context.Documents.FirstOrDefault(x => x.Id == id && x.UserId == user.Id);
+            if (file == null)
+                return NotFound("File was not found!");
 
-            try
-            {
-                connection.Open();
-                var reader = cmd.ExecuteReader();
-
-                while (reader.Read())
-                {
-                    content = (byte[])reader[0];
-                    contentType = reader.GetString(1);
-                }
-
-            }
-            catch(Exception ex)
-            {
-                Console.WriteLine($"{ex.Message}");
-            }
-
-            return File(content, contentType);
+            return File(file.Content, file.ContentType);
         }
 
         private List<FileModel>? GetFiles()

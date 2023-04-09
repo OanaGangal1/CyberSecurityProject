@@ -12,7 +12,7 @@ builder.Configuration
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
-builder.Services.AddDbContext<AppDbContext>(opt =>
+builder.Services.AddDbContext<VulnerableDbContext>(opt =>
 opt.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 var app = builder.Build();

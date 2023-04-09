@@ -6,7 +6,7 @@ namespace Vulnerable.Controllers
 {
     public class LoginController : BaseController
     {
-        public LoginController(AppDbContext context) : base(context)
+        public LoginController(VulnerableDbContext context) : base(context)
         {
         }
 

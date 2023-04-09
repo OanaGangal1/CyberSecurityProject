@@ -4,18 +4,16 @@ using Dependencies.DataLayer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace Dependencies.Migrations
+namespace Dependencies.Migrations.VulnerableDb
 {
-    [DbContext(typeof(AppDbContext))]
-    [Migration("20230408091543_Initial")]
-    partial class Initial
+    [DbContext(typeof(VulnerableDbContext))]
+    partial class VulnerableDbContextModelSnapshot : ModelSnapshot
     {
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -24,7 +22,7 @@ namespace Dependencies.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("Shared.Entities.Document", b =>
+            modelBuilder.Entity("Dependencies.Entities.Vulnerable.Document", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -37,6 +35,10 @@ namespace Dependencies.Migrations
                         .HasColumnType("varbinary(max)");
 
                     b.Property<string>("ContentType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -58,7 +60,7 @@ namespace Dependencies.Migrations
                     b.ToTable("Documents");
                 });
 
-            modelBuilder.Entity("Shared.Entities.User", b =>
+            modelBuilder.Entity("Dependencies.Entities.Vulnerable.User", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -82,9 +84,9 @@ namespace Dependencies.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("Shared.Entities.Document", b =>
+            modelBuilder.Entity("Dependencies.Entities.Vulnerable.Document", b =>
                 {
-                    b.HasOne("Shared.Entities.User", "User")
+                    b.HasOne("Dependencies.Entities.Vulnerable.User", "User")
                         .WithMany("Documents")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -93,7 +95,7 @@ namespace Dependencies.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Shared.Entities.User", b =>
+            modelBuilder.Entity("Dependencies.Entities.Vulnerable.User", b =>
                 {
                     b.Navigation("Documents");
                 });

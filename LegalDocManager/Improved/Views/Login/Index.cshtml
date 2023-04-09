@@ -1,0 +1,44 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+    @*<link rel="stylesheet" href="~/css/bundles/login.css" asp-append-version="true" />*@
+</head>
+
+<body class=" d-flex flex-column bg-white">
+    <div class="row g-0 flex-fill">
+        <div class="col-12 col-lg-6 col-xl-4 d-flex flex-column justify-content-center">
+            <div class="container container-tight my-5 px-lg-5">
+                <div class="pb-4">
+                    <h1 class="h1 text-left " style="font-size:32px;">
+                        Login
+                    </h1>
+                </div>
+
+                <form id="loginForm" onsubmit="return false">
+                    <div class="mb-3">
+                        <label class="form-label">Username</label>
+                        <input class="form-control" placeholder="username" autocomplete="off" name="Username" required>
+                    </div>
+                    <div class="mb-2">
+                        <label class="form-label"> Password</label>
+                        <input type="password" class="form-control" placeholder="password" autocomplete="off" name="Password">
+                    </div>
+                    <div class="form-footer mt-4">
+                        <button type="submit" class="btn btn-dark ms-0" id="loginBtn">Login</button>
+                    </div>
+                    <div class="form-footer mt-4">
+                         <a href="@Url.Action("Index", "Register")">Sign up</a>
+                    </div>
+                    
+                </form>
+                <div class="form-footer mt-4">
+                         <button id="signout">Sign out</button>
+                    </div>
+            </div>
+        </div>
+    </div>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/auth.js"></script>
+</body>
+</html>

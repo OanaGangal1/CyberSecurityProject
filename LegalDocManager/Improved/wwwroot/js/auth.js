@@ -36,7 +36,6 @@ const authController = function ()
 
     const onLogin = function ()
     {
-        console.log("hellp")
         let reqData = utilities.formDataAsJson(context.loginForm);
         $.ajax({
             url: context.URLS.loginUrl, reqData

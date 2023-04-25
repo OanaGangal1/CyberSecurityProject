@@ -66,18 +66,19 @@ namespace Vulnerable.Controllers
             {
                 connection.Open();
                 var reader = cmd.ExecuteReader();
-
-                while (reader.Read())
+                if(reader != null)
                 {
-                    fileResults.Add(new FileModel
+                    while (reader.Read())
                     {
-                        Id = reader.GetInt32(2),
-                        FileName = reader.GetString(1),
-                        FileType = reader.GetString(0),
-                        Description = reader.GetString(3),
-                    });
+                        fileResults.Add(new FileModel
+                        {
+                            Id = reader.GetInt32(2),
+                            FileName = reader.GetString(1),
+                            FileType = reader.GetString(0),
+                            Description = reader.IsDBNull(3) ? null : reader.GetString(3),
+                        });
+                    }
                 }
-
             }catch(Exception ex)
             {
                 Console.WriteLine(ex.Message);
@@ -120,13 +121,14 @@ namespace Vulnerable.Controllers
                     contentType = reader.GetString(1);
                 }
 
+                return File(content, contentType);
+
             }
             catch(Exception ex)
             {
                 Console.WriteLine($"{ex.Message}");
+                return BadRequest("Could not download file");
             }
-
-            return File(content, contentType);
         }
 
         private List<FileModel>? GetFiles()

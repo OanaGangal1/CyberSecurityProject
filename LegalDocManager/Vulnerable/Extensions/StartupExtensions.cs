@@ -14,10 +14,9 @@ namespace Vulnerable.Extensions
 
         private static string GetDbPath()
         {
-            var folder = Environment.SpecialFolder.LocalApplicationData;
-            var path = Environment.GetFolderPath(folder);
-            return System.IO.Path.Join(path, "v-legaldoc.db");
+            return System.IO.Path.Join(AppDomain.CurrentDomain.BaseDirectory, "v-legaldoc.db");
         }
+
         public static string ConnectionString = $"Data Source={GetDbPath()}";
     }
 }

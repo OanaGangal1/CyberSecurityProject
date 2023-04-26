@@ -9,9 +9,7 @@ namespace Dependencies.DataLayer
         private string _dbPath;
         public VulnerableDbContext()
         {
-            var folder = Environment.SpecialFolder.LocalApplicationData;
-            var path = Environment.GetFolderPath(folder);
-            _dbPath = System.IO.Path.Join(path, "v-legaldoc.db");
+            _dbPath = System.IO.Path.Join(AppDomain.CurrentDomain.BaseDirectory, "v-legaldoc.db");
             Database.EnsureCreated();
         }
 

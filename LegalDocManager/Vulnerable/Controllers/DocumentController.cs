@@ -3,9 +3,12 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using Vulnerable.Models;
-using Microsoft.Data.SqlClient;
 using Vulnerable.Extensions;
 using Dependencies.Entities.Vulnerable;
+using System.Data.SqlClient;
+using Microsoft.Data.Sqlite;
+using System.Data;
+using System.Transactions;
 
 namespace Vulnerable.Controllers
 {
@@ -56,8 +59,8 @@ namespace Vulnerable.Controllers
         [HttpGet]
         public IActionResult GetFile(string fileName)
         {
-            using var connection = new SqlConnection(StartupExtensions.ConnectionString);
-            var query = "SELECT ContentType, FileName, Id, Description FROM [v-legaldoc].dbo.Documents WHERE FileName LIKE '" + fileName + "%'";
+            using var connection = new SqliteConnection(StartupExtensions.ConnectionString);
+            var query = "SELECT ContentType, FileName, Id, Description FROM Documents WHERE FileName LIKE '" + fileName + "%'";
             var cmd = connection.CreateCommand();
             cmd.CommandText = query;
             var fileResults = new List<FileModel>();
@@ -102,8 +105,8 @@ namespace Vulnerable.Controllers
         [HttpGet]
         public IActionResult Download(int id)
         {
-            using var connection = new SqlConnection(StartupExtensions.ConnectionString);
-            var query = "SELECT Content, ContentType FROM [v-legaldoc].dbo.Documents WHERE Id = " + id;
+            using var connection = new SqliteConnection(StartupExtensions.ConnectionString);
+            var query = "SELECT Content, ContentType FROM Documents WHERE Id = " + id;
             var cmd = connection.CreateCommand();
             cmd.CommandText = query;
 

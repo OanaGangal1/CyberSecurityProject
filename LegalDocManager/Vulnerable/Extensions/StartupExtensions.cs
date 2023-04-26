@@ -12,6 +12,12 @@ namespace Vulnerable.Extensions
             context.Database.Migrate();
         }
 
-        public static string ConnectionString = "Server=localhost; Database=v-legaldoc; Integrated Security=True;";
+        private static string GetDbPath()
+        {
+            var folder = Environment.SpecialFolder.LocalApplicationData;
+            var path = Environment.GetFolderPath(folder);
+            return System.IO.Path.Join(path, "v-legaldoc.db");
+        }
+        public static string ConnectionString = $"Data Source={GetDbPath()}";
     }
 }

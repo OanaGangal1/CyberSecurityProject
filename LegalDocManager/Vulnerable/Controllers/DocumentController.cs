@@ -3,9 +3,12 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using Vulnerable.Models;
-using Microsoft.Data.SqlClient;
 using Vulnerable.Extensions;
 using Dependencies.Entities.Vulnerable;
+using System.Data.SqlClient;
+using Microsoft.Data.Sqlite;
+using System.Data;
+using System.Transactions;
 
 namespace Vulnerable.Controllers
 {
@@ -56,8 +59,8 @@ namespace Vulnerable.Controllers
         [HttpGet]
         public IActionResult GetFile(string fileName)
         {
-            using var connection = new SqlConnection(StartupExtensions.ConnectionString);
-            var query = "SELECT ContentType, FileName, Id, Description FROM [v-legaldoc].dbo.Documents WHERE FileName LIKE '" + fileName + "%'";
+            using var connection = new SqliteConnection(StartupExtensions.ConnectionString);
+            var query = "SELECT ContentType, FileName, Id, Description FROM Documents WHERE FileName LIKE '" + fileName + "%'";
             var cmd = connection.CreateCommand();
             cmd.CommandText = query;
             var fileResults = new List<FileModel>();
@@ -66,18 +69,19 @@ namespace Vulnerable.Controllers
             {
                 connection.Open();
                 var reader = cmd.ExecuteReader();
-
-                while (reader.Read())
+                if(reader != null)
                 {
-                    fileResults.Add(new FileModel
+                    while (reader.Read())
                     {
-                        Id = reader.GetInt32(2),
-                        FileName = reader.GetString(1),
-                        FileType = reader.GetString(0),
-                        Description = reader.GetString(3),
-                    });
+                        fileResults.Add(new FileModel
+                        {
+                            Id = reader.GetInt32(2),
+                            FileName = reader.GetString(1),
+                            FileType = reader.GetString(0),
+                            Description = reader.IsDBNull(3) ? null : reader.GetString(3),
+                        });
+                    }
                 }
-
             }catch(Exception ex)
             {
                 Console.WriteLine(ex.Message);
@@ -101,8 +105,8 @@ namespace Vulnerable.Controllers
         [HttpGet]
         public IActionResult Download(int id)
         {
-            using var connection = new SqlConnection(StartupExtensions.ConnectionString);
-            var query = "SELECT Content, ContentType FROM [v-legaldoc].dbo.Documents WHERE Id = " + id;
+            using var connection = new SqliteConnection(StartupExtensions.ConnectionString);
+            var query = "SELECT Content, ContentType FROM Documents WHERE Id = " + id;
             var cmd = connection.CreateCommand();
             cmd.CommandText = query;
 
@@ -120,13 +124,14 @@ namespace Vulnerable.Controllers
                     contentType = reader.GetString(1);
                 }
 
+                return File(content, contentType);
+
             }
             catch(Exception ex)
             {
                 Console.WriteLine($"{ex.Message}");
+                return BadRequest("Could not download file");
             }
-
-            return File(content, contentType);
         }
 
         private List<FileModel>? GetFiles()

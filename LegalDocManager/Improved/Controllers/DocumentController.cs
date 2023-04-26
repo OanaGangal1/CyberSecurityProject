@@ -6,12 +6,21 @@ using Improved.Models;
 using Microsoft.AspNetCore.Authorization;
 using Dependencies.Entities.Improved;
 using Microsoft.AspNetCore.Identity;
+using System.Text.Encodings.Web;
 
 namespace Improved.Controllers
 {
     [Authorize]
     public class DocumentController : BaseController
     {
+        private static Dictionary<string, string> _fileIdWhiteList = new()
+        {
+            {"application/pdf", "25-50-44-46" },
+            {"image/jpeg", "FF-D8-FF-E0 FF-D8-FF-EE" },
+            {"image/png", "89-50-4E-47-0D-0A-1A-0A" },
+            {"application/vnd.openxmlformats-officedocument.wordprocessingml.document", "50-4B-03-04" }
+        };
+
         public DocumentController(ImprovedDbContext context, UserManager<User> userManager) : base(context, userManager)
         {
         }
@@ -31,6 +40,11 @@ namespace Improved.Controllers
 
             if (user == null)
                 return BadRequest("This user is not authorized!");
+
+            var isFileAccepted = ValidateFile(addFile.File);
+
+            if (!isFileAccepted)
+                return BadRequest("File format is not accepted!");
 
             var fileName = Path.GetFileName(addFile.File.FileName);
             var fileExtension = Path.GetExtension(addFile.File.FileName);
@@ -52,6 +66,48 @@ namespace Improved.Controllers
             await context.SaveChangesAsync();
 
             return Ok("Document saved");
+        }
+
+        private bool ValidateFile(IFormFile file)
+        {
+            using var reader = new BinaryReader(file.OpenReadStream());
+            reader.BaseStream.Position = 0x0;
+            var data = reader.ReadBytes(0x10);
+            var dataAsHex = BitConverter.ToString(data);
+            var fileExtension = Path.GetExtension(file.FileName);
+
+            switch (fileExtension)
+            {
+                case ".pdf":
+                    if (_fileIdWhiteList["application/pdf"] != dataAsHex[..11])
+                        return false;
+                    break;
+
+                case ".jpg":
+                    var x = _fileIdWhiteList["image/jpeg"].Split(" ");
+                    if (!x.Contains(dataAsHex[..11]))
+                        return false;
+                    break;
+
+                case ".jpeg":
+                    var y = _fileIdWhiteList["image/jpeg"].Split(" ");
+                    if (!y.Contains(dataAsHex[..11]))
+                        return false;
+                    break;
+
+                case ".png":
+                    if (_fileIdWhiteList["image/png"] != dataAsHex[..23])
+                        return false;
+                    break;
+
+                case ".docx":
+                    if (_fileIdWhiteList["application/vnd.openxmlformats-officedocument.wordprocessingml.document"] != dataAsHex[..11])
+                        return false;
+                    break;
+                default: return false;
+            }
+
+            return true;
         }
 
         [HttpGet]

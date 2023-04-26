@@ -39,8 +39,8 @@ namespace Improved.Controllers
             
             if (wasCreated.Succeeded)
             {
-                await userManager.AddPasswordAsync(user, model.Password);
-                return Ok("Registration was successful!");
+                var wasPassAdded = await userManager.AddPasswordAsync(user, model.Password);
+                return wasPassAdded.Succeeded ? Ok("Registration was successful!") : BadRequest("Password too weak!");
             }
 
             return BadRequest("User could not be created!");

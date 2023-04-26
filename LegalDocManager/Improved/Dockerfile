@@ -10,8 +10,8 @@ RUN apt-get update && apt-get install -y git
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
 RUN git clone https://github.com/OanaGangal1/CyberSecurityProject.git
-RUN cd /LegalDocManager/Vulnerable
-RUN dotnet build "Vulnerable.csproj" -c Release -o /app/build
+RUN cd /LegalDocManager/Improved
+RUN dotnet build "Improved.csproj" -c Release -o /app/build
 #COPY ["Improved/Improved.csproj", "Improved/"]
 #COPY ["Dependencies/Dependencies.csproj", "Dependencies/"]
 #RUN dotnet restore "Improved/Improved.csproj"
@@ -20,9 +20,9 @@ RUN dotnet build "Vulnerable.csproj" -c Release -o /app/build
 #RUN dotnet build "Improved.csproj" -c Release -o /app/build
 #
 FROM build AS publish
-RUN dotnet publish "Vulnerable.csproj" -c Release -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "Improved.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "Vulnerable.dll"]
+ENTRYPOINT ["dotnet", "Improved.dll"]

@@ -39,6 +39,6 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Register}/{action=Index}/{id?}");
 
-app.DbMigrate();
+//app.DbMigrate();
 
 app.Run();
